@@ -1,0 +1,85 @@
+:root {
+    /*   --color-bg: #2e1700; */
+      --color-bg: rgb(43, 28, 4); /* rgb(43, 28, 4) */
+      --color-bg-highlight: rgb(100, 136, 246);
+      --color-highlight: #f82a2a;
+      --color-text-main: #000000;
+      --color-primary: rgb(37, 88, 242);
+      --color-secondary: rgba(158,242,37, 1);
+      --wrapper-height: 87vh;
+      --image-max-width: 300px;
+      --image-margin: 3rem;
+      --font-family: "neue-machina-inktrap-ultrabold";
+      --font-family-header: "HK Grotesk";
+    }
+  body {
+      background-color: #000000;
+  }
+  
+  .rotation-pad {
+      position: absolute;
+  }
+  
+  .rotation-pad .region {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(rgba(218, 225, 230, 0.25) 5%, rgba(200, 205, 210, 0.50) 95%),
+                  url("https://raw.githubusercontent.com/mese79/TouchControls/master/images/cam.png") center center no-repeat;
+  /* 	border: 2px solid rgba(218, 225, 230, 90.25); */
+    border: 2px solid var(--color-primary);
+      border-radius: 90px;
+      box-shadow: 0px 0px 5px var(--color-primary);
+  /*   box-shadow: var(--color-primary); */
+      user-select: none;
+    z-index:100;
+  }
+  
+  .rotation-pad .handle {
+      opacity: 0.1;
+      position: absolute;
+      height: 30px;
+      width: 30px;
+      top: 0px;
+      left: 0px;
+      background: radial-gradient(rgba(215, 225, 255, 0.70) 0%, rgba(215, 225, 255, 0.50) 100%);
+      /*border: 1px solid rgba(145, 105, 245, 0.90);*/
+      border-radius: 50%;
+      box-shadow: 0px 0px 7px rgba(195, 205, 245, 0.9);
+      text-align: center;
+      font: 24px/44px "Courier New", Courier, monospace;
+      user-select: none;
+  }
+  
+  .movement-pad {
+      position: absolute;
+  }
+  
+  .movement-pad .region {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(rgba(218, 225, 230, 0.25) 5%, rgba(218, 225, 230, 0.50) 95%),
+                  url("https://raw.githubusercontent.com/mese79/TouchControls/master/images/nav.png") center center no-repeat;
+      border: 2px solid var(--color-primary);
+      border-radius: 90px;
+      box-shadow: 0px 0px 5px var(--color-primary);
+      user-select: none;
+    z-index:100;
+  }
+  
+  .movement-pad .handle {
+      opacity: 0.1;
+      position: absolute;
+      height: 30px;
+      width: 30px;
+      top: 0px;
+      left: 0px;
+      background: radial-gradient(rgba(215, 225, 255, 0.70) 0%, rgba(215, 225, 255, 0.50) 100%);
+      /*border: 1px solid rgba(145, 105, 245, 0.90);*/
+      border-radius: 50%;
+      box-shadow: 0px 0px 7px rgba(195, 205, 245, 0.9);
+      text-align: center;
+      font: 24px/44px "Courier New", Courier, monospace;
+      user-select: none;
+  }
