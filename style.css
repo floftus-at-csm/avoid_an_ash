@@ -206,6 +206,7 @@
       cursor: pointer;
       z-index: 11;
         opacity: 1;
+        max-width:50%;
         /* animation: fade 5s linear infinite; */
       }
     

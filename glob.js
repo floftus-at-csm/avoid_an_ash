@@ -13,7 +13,7 @@ import TouchControls from "./js/TouchControls.js";
 //=========================================================
 // Check Device
 let os = getOS();
-let debugOn = true;
+let debugOn = false;
 if (debugOn) console.log(os);
 let touchDevice = is_touch_enabled();
 if (debugOn) console.log("is this a touch device? ", touchDevice);
@@ -382,6 +382,8 @@ scene.add(backgroundSphere);
 // pointer lock
 let controls;
 if (desktop) {
+  var smallCSS = document.getElementById("smallCSS");
+  smallCSS.href = "style.css";
   addDesktopControls();
 } else {
   addTouchControls();

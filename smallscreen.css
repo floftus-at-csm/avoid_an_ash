@@ -116,6 +116,7 @@
       background-color: rgba(0,0,0);
   /*     -webkit-user-select: none; */
       border-radius: var(--borderRad);
+      background-repeat: no-repeat;
     }
   
     #instructions {
