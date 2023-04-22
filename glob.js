@@ -127,10 +127,14 @@ loader.load(
         viewfinderContainer.innerHTML =
           "<p id='viewfinderText1'></p><img src='https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/Asset%2022frame2.svg?v=1681724178813' id='viewFinderBorderMobile'/>";
         blocker.style.backgroundColor = "transparent";
-        setTimeout(timeoutMobile(), 2000);
+        // setTimeout(timeoutMobile(), 2000);
       }
       loadingTrigger = true;
     });
+    if(!desktop){
+      timeoutMobile();
+        if(debugOn)console.log("calling timeout mobile");
+    }
   },
   undefined,
   function (error) {
@@ -153,7 +157,6 @@ dinoTest.scale.set(5, 5, 5);
 
 let redMarks = await addModel(
   loader,
-  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/redMarks.glb?v=1681246556800",
   "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/redMarksSmall.glb?v=1682154537923",
   -22.5,
   8,
@@ -178,7 +181,6 @@ curve2.scale.set(5, 5, 5);
 
 let duo = await addModel(
   loader,
-  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/duo.glb?v=1681245064119",
   "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/duoSmall.glb?v=1682156013186",
   -20.5,
   0,
@@ -191,7 +193,6 @@ duo.scale.set(5, 5, 5);
 
 let yellow = await addModel(
   loader,
-  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/Yellow.glb?v=1681246546285",
   "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/yellowSmall.glb?v=1682155256815",
   15.5,
   5,
@@ -267,7 +268,6 @@ let hauntedTrigger = true;
 
 let haunted2 = await addModel(
   loader,
-  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/haunted2New.glb?v=1680861199767",
   "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/haunted2Decimated.glb?v=1682154033192",
   3,
   0,
@@ -354,7 +354,6 @@ torus3.position.set(14, 10.75, -45);
 scene.add(torus3);
 
 // plane
-// const texture2 = new THREE.TextureLoader().load( './models/textures/textured_0_rFTKYGpk.jpg' );
 const texture2 = new THREE.TextureLoader().load(
   "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/cloud-noise.png?v=1680861827995"
 );
@@ -372,7 +371,6 @@ var backgroundSphere = new THREE.Mesh(
   new THREE.MeshBasicMaterial({
     map: new THREE.TextureLoader().load(
       "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/bg.jpg?v=1681647553732"
-      // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/bg_bw.jpg?v=1681652407187"
     ),
     side: THREE.BackSide,
   })
@@ -424,19 +422,7 @@ let text_array_mobile = [
   "the slower you go",
   "the more you'll see",
 ];
-let positive_array = [
-  "that's right, steal back the light",
-  "who keeps killing them, I don't know",
-  "some of the spirits who come, I recognise from before",
-  "but they come in different forms now, <br>shinier and brighter",
-  "it's like they've taken in all<br> the colour from outside"
-]
-let negative_array = [
-  "I feel the colour fading away, act quick",
-  "lost, the lot of them, poor things",
-  "be careful they don't incase you",
-  "you could get stuck forever"
-]
+
 let story_array = [
     "that's right, <br>steal back the light",
   "someone must be killing them, <br>poor things",
@@ -473,7 +459,6 @@ instructions.addEventListener("click", function () {
       instructions.innerHTML =
         "<p class='introText'>" + starter_array[0] + "</p>";
     } else {
-      // camera.rotation.z += Math.PI/5;
       camera.rotation.y += Math.PI / 5;
       controls.getObject().position.y = controls.getObject().position.y - 2;
       controls.getObject().position.z = controls.getObject().position.z + 2;
@@ -644,14 +629,10 @@ addEventListener("mousemove", (event) => {});
 let clock = new THREE.Clock();
 let delta = 0;
 
-// let interval = 1 / 4;
 let interval = 1 / 8;
-let interval2 = 1 / 7;
 let ended = false;
 console.log("pre animate");
 animate();
-// let counter = 0;
-var counter = document.getElementById("counter");
 
 function animate() {
   if (ended == false) {
@@ -677,41 +658,25 @@ function animate() {
       controls.update();
     }
 
-    // pencilLinePass.uniforms.uThresh.value = map(elapsedTime%10, 0, 10, 0, 1);
     if (desktop) {
-      // console.log(controls.getObject().position)
       raycaster.ray.origin.copy(controls.getObject().position);
       raycaster2.near = 1;
       raycaster2.far = 5;
-      // raycaster2.ray.origin.y += 5;
       raycaster2.ray.origin.copy(controls.getObject().position);
       raycaster2.setFromCamera(new THREE.Vector2(), camera);
-    } else {
-      raycaster.ray.origin.copy(controls.fpsBody.position);
-      raycaster2.near = 1;
-      raycaster2.far = 6;
-      // raycaster2.ray.origin.y += 5;
-      let cameraDirection = controls
-        .getDirection2(new THREE.Vector3(0, 0, 0))
-        .clone();
-      let direction = cameraDirection.clone();
-      raycaster2.set(controls.fpsBody.position, direction);
-      raycaster2.ray.origin.copy(controls.fpsBody.position);
-      //   let vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1)
-      // vector.unproject(camera)
-      // raycaster2.set( controls.fpsBody.position, vector.sub(controls.fpsBody.position).normalize());
-      //   raycaster2.ray.origin.copy(controls.fpsBody.position);
-      // raycaster2.setFromCamera(new THREE.Vector2(), camera);
-      // THREE.Raycaster(this.fpsBody.position, direction)
-    }
+    } 
+ 
     const intersections = raycaster.intersectObjects(collideableObjects, false);
-    // console.log(specialObjects)
-    const intersections2 = raycaster2.intersectObjects(specialObjects, false);
-    // console.log("intersections2 is: ", intersections2)
+    let intersections2;
+    if(desktop){
+      intersections2 = raycaster2.intersectObjects(specialObjects, false);  
+    }else{
+      intersections2 = controls.update();
+    }
+    
     if (intersections2.length > 0) {
       if (debugOn) console.log("specialObjects: ", specialObjects);
       var current_val = afterImagePass.uniforms.damp.value;
-      // console.log(intersections2[i]);
       for (let i = 0; i < intersections2.length; i++) {
         intersections2[i].object.material.color.set(0xffffff);
         superTrigger = handleIntersections(intersections2[i], "super",  superTrigger);
@@ -757,7 +722,6 @@ function animate() {
     }
 
     if (onObject === true) {
-      // console.log('on object');
       velocity.y = Math.max(0, velocity.y);
       canJump = true;
     }
@@ -852,27 +816,25 @@ function timeoutMobile() {
   setTimeout(function () {
     try {
       var viewfinderText1 = document.getElementById("viewfinderText1");
-      if (text_iterator < text_array_mobile.length - 1) {
+      if (text_iterator < text_array_mobile.length) {
         if (debugOn) console.log(text_array_mobile[text_iterator]);
         viewfinderText1.innerHTML = text_array_mobile[text_iterator];
       } else {
         // text_iterator = 0;
         viewfinderText1.innerHTML = "";
       }
-      text_iterator++;
+      
     } catch (error) {
       //pass
     }
     if (text_iterator < text_array_mobile.length) {
+      text_iterator++;
       timeoutMobile();
     } else {
-      // if(controls.started == false){
-      //   text_iterator = 0;
-      //   timeout();
-      // }else{
+
       if (debugOn)
         console.log("exiting timeout loop and reseting afterImagePass");
-      afterImagePass.uniforms.damp.value = 0.655;
+      afterImagePass.uniforms.damp.value = mainAfterImageVal;
       // }
     }
   }, 5000);
@@ -903,33 +865,7 @@ function setAfterImage(val, amount, loop) {
     }, 5000);
   }
 }
-// function setAfterImage(val, amount, loop) {
-//   if (pausedV == false) {
-//     setTimeout(function () {
-//       console.log("pre change pass: ", afterImagePass.uniforms.damp.value);
-//       if (amount == "positive") {
-//         if (afterImagePass.uniforms.damp.value < 0.99) {
-//           afterImagePass.uniforms.damp.value =
-//             afterImagePass.uniforms.damp.value +
-//             0.05;
-//         }
-//       } else {
-//         afterImagePass.uniforms.damp.value =
-//           val -
-//           val/8;
-//       }
 
-//       console.log("post change pass: ", afterImagePass.uniforms.damp.value);
-//       pencilLinePass.material.uniforms.uThresh.value = 0.75;
-//       // counter.innerHTML =
-//       //   parseInt((1 - afterImagePass.uniforms.damp.value) * 100) + "%";
-//       if (afterImagePass.uniforms.damp.value > 0.99) {
-//         ended = true;
-//       }
-//       if (loop) setAfterImage(val, amount, true);
-//     }, 5000);
-//   }
-// }
 
 function is_touch_enabled() {
   return (
@@ -1006,6 +942,7 @@ function addTouchControls() {
     maxPitch: 25, // max camera pitch angle
     hitTest: false, // stop on hitting objects
     hitTestDistance: 40, // distance to test for hit
+    raycasterObjects: specialObjects,
   };
   controls = new TouchControls(container[0].parentNode, camera, options);
   controls.setPosition(0, 2.5, 5);

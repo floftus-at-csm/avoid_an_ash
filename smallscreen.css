@@ -225,7 +225,8 @@
   /*       left:45%; */
         text-align: center;
         opacity: 1;
-        animation: fade 4s linear infinite;
+        /* animation: fade 4s linear infinite; */
+        max-width: 80%;
       }
     
     
@@ -240,7 +241,7 @@
     display:block;
     z-index: 50;
   }
-    #superModel{
+    #super{
       top: 10%;
       left:0%;
       visibility: hidden;

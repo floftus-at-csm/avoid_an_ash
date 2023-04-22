@@ -1,4 +1,5 @@
-import {THREE} from '../glob.js';
+// import * as THREE from 'three'
+import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r132/build/three.module.js';
 import * as utils from './utils.js'
 import RotationPad from './RotationPad.js'
 import MovementPad from './MovementPad.js'
@@ -13,9 +14,10 @@ class TouchControls {
     mouse
     enabled = true
     started = false
+    raycasterObjects
+    hitObjects
     #scene
     #rotationMatrices
-    #hitObjects
     #velocity
     #cameraHolder
     #maxPitch
@@ -39,11 +41,12 @@ class TouchControls {
             rotationSpeed: 0.2,   // coefficient of rotation
             maxPitch: 55,           // max camera pitch angle
             hitTest: true,          // stop on hitting objects
-            hitTestDistance: 40     // distance to test for hit
+            hitTestDistance: 5,     // distance to test for hit
+            raycasterObjects: [],
         }, options)
-
+        // this.raycasterObjects = this.con
         this.#rotationMatrices = []
-        this.#hitObjects = []
+        this.hitObjects = []
         this.#maxPitch = this.config.maxPitch * Math.PI / 180
         this.#velocity = new THREE.Vector3(0, 0, 0)
         this.mouse = new THREE.Vector2()
@@ -251,7 +254,7 @@ class TouchControls {
     // Public functions
     //
     update() {
-        if (this.config.hitTest)
+        // if (this.config.hitTest)
             this.hitTest()
 
         this.#velocity.x += (-1 * this.#velocity.x) * this.config.delta
@@ -286,28 +289,30 @@ class TouchControls {
         this.fpsBody.translateX(this.#velocity.x)
         this.fpsBody.translateY(this.#velocity.y)
         this.fpsBody.translateZ(this.#velocity.z)
+      return this.hitObjects;
     }
 
     hitTest() {
         this.unlockAllDirections()
-        this.#hitObjects = []
-        // let cameraDirection = this.getDirection2(new THREE.Vector3(0, 0, 0)).clone()
+        this.hitObjects = []
+        let cameraDirection = this.getDirection2(new THREE.Vector3(0, 0, 0)).clone()
 
-//         for (let i = 0; i < 4; i++) {
-//             // Apply rotation for each direction
-//             let direction = cameraDirection.clone()
-//             direction.applyMatrix4(this.#rotationMatrices[i])
+        for (let i = 0; i < 4; i++) {
+            // Apply rotation for each direction
+            let direction = cameraDirection.clone()
+            direction.applyMatrix4(this.#rotationMatrices[i])
 
-//             let rayCaster = new THREE.Raycaster(this.fpsBody.position, direction)
-//             let intersects = rayCaster.intersectObject(this.#scene, true)
-//             if ((intersects.length > 0 && intersects[0].distance < this.config.hitTestDistance)) {
-//                 this.#lockDirectionByIndex(i)
-//                 this.#hitObjects.push(intersects[0])
-//                 // console.log(intersects[0].object.name, i)
-//             }
-//         }
-
-        return this.#hitObjects
+            let rayCaster = new THREE.Raycaster(this.fpsBody.position, direction)
+            // console.log(this.raycasterObjects);
+            let intersects = rayCaster.intersectObjects(this.config.raycasterObjects, false)
+            if ((intersects.length > 0 && intersects[0].distance < this.config.hitTestDistance)) {
+                // this.#lockDirectionByIndex(i)
+                this.hitObjects.push(intersects[0])
+                // console.log(intersects[0].object.name, i)
+            }
+        }
+        // console.log(this.hitObjects);
+        return this.hitObjects
     }
 
     getDirection2(v) {
@@ -411,7 +416,7 @@ class TouchControls {
     }
 
     getHitObjects() {
-        return this.#hitObjects
+        return this.hitObjects
     }
 }
 
