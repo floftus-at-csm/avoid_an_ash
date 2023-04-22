@@ -423,6 +423,16 @@ let text_array_mobile = [
   "use the dial on the right to look around",
   "the slower you go",
   "the more you'll see",
+  "These woods are where I go to rest",
+  "As my host sleeps I wander here",
+  "But now, the woods are fading",
+  "ghouls and demons have arrived",
+  "They’re dead I think, <br>never speaking or moving",
+  "like vampires they come and siphon <br>the colour from this place",
+  "and all vibrancy is lost",
+  "Now, the woods are Fading",
+  "Help me gather these ghouls and demons",
+  "and lead them to a place of rest",
 ];
 
 let story_array = [
