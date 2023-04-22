@@ -200,24 +200,47 @@
         
       }
   
-      #viewFinderBorderMobile{
-        touch-action: none;
-        width: 100%;
-        height: 100%;
+      @media only screen and (max-width: 600px) {
+        #viewFinderBorderMobile{
+            touch-action: none;
+            width: 100%;
+            height: 100%;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    
-        text-align: center;
-        font-size: 1.5rem;
-        /* cursor: pointer; */
-        z-index: 20;
+            text-align: center;
+            font-size: 1.5rem;
+            /* cursor: pointer; */
+            z-index: 20;
+      /*       display:none; */
+            -webkit-user-select: none;
+            
+            
+          }
+      }
+      @media only screen and (min-width: 600px) {
+        #viewFinderBorderMobile{
+            touch-action: none;
+            width: 100%;
+            height: 100%;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         
-        -webkit-user-select: none;
-        
-        
+            text-align: center;
+            font-size: 1.5rem;
+            /* cursor: pointer; */
+            z-index: 20;
+            display:none;
+            -webkit-user-select: none;
+            
+            
+          }
       }
       
       #viewfinderText1{
