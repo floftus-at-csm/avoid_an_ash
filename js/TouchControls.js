@@ -1,5 +1,4 @@
-// import * as THREE from 'three'
-import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r132/build/three.module.js';
+import {THREE} from '../glob.js';
 import * as utils from './utils.js'
 import RotationPad from './RotationPad.js'
 import MovementPad from './MovementPad.js'

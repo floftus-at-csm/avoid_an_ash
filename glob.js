@@ -1,6 +1,7 @@
 //=========================================================
 // import necessary modules
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r132/build/three.module.js";
+export {THREE};
 import { GLTFLoader } from "https://threejsfundamentals.org/threejs/resources/threejs/r132/examples/jsm/loaders/GLTFLoader.js";
 import { PointerLockControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r132/examples/jsm/controls/PointerLockControls.js";
 import { EffectComposer } from "https://threejsfundamentals.org/threejs/resources/threejs/r132/examples/jsm/postprocessing/EffectComposer.js";
@@ -17,6 +18,8 @@ if (debugOn) console.log(os);
 let touchDevice = is_touch_enabled();
 if (debugOn) console.log("is this a touch device? ", touchDevice);
 let desktop = false;
+let inRaycaster = false;
+let mainAfterImageVal = 0.7;
 
 if (os == "Windows" || os == "Mac OS" || os == "Linux") {
   desktop = true;
@@ -92,7 +95,8 @@ let loadingTrigger = false;
 
 loader.load(
   // "https://cdn.glitch.me/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/FullLandscape2.glb?v=1680860285362",
-  "https://cdn.glitch.me/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/FullLandscape3.glb?v=1681247059540",
+  // "https://cdn.glitch.me/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/FullLandscape3.glb?v=1681247059540",
+  "https://cdn.glitch.me/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/FullLandscapeReduced.glb?v=1682153617463",
   function (gltf) {
     scene.add(gltf.scene);
     dino = gltf.scene;
@@ -136,7 +140,8 @@ loader.load(
 
 let dinoTest = await addModel(
   loader,
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/dinotest.glb?v=1681246575590",
+  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/dinotest.glb?v=1681246575590",
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/dinoTiny.glb?v=1682154563386",
   -17.5,
   7,
   -5,
@@ -148,7 +153,8 @@ dinoTest.scale.set(5, 5, 5);
 
 let redMarks = await addModel(
   loader,
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/redMarks.glb?v=1681246556800",
+  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/redMarks.glb?v=1681246556800",
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/redMarksSmall.glb?v=1682154537923",
   -22.5,
   8,
   -15,
@@ -172,9 +178,10 @@ curve2.scale.set(5, 5, 5);
 
 let duo = await addModel(
   loader,
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/duo.glb?v=1681245064119",
+  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/duo.glb?v=1681245064119",
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/duoSmall.glb?v=1682156013186",
   -20.5,
-  8,
+  0,
   -15,
   0,
   null,
@@ -184,7 +191,8 @@ duo.scale.set(5, 5, 5);
 
 let yellow = await addModel(
   loader,
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/Yellow.glb?v=1681246546285",
+  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/Yellow.glb?v=1681246546285",
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/yellowSmall.glb?v=1682155256815",
   15.5,
   5,
   -15,
@@ -220,7 +228,7 @@ let pirate = await addModel(
 let pirateTrigger = true;
 let superModel = await addModel(
   loader,
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/superNew2.glb?v=1680861203121",
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/superModel.glb?v=1682154879970",
   -3,
   0,
   -5,
@@ -246,7 +254,7 @@ let ghoulTrigger = true;
 
 let haunted = await addModel(
   loader,
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/hauntedNew.glb?v=1680861201086",
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/hauntedSmall.glb?v=1682154995485",
   -23,
   0,
   -20,
@@ -259,7 +267,8 @@ let hauntedTrigger = true;
 
 let haunted2 = await addModel(
   loader,
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/haunted2New.glb?v=1680861199767",
+  // "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/haunted2New.glb?v=1680861199767",
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/haunted2Decimated.glb?v=1682154033192",
   3,
   0,
   -20,
@@ -285,7 +294,7 @@ let miniGhoulTrigger = true;
 
 let bat = await addModel(
   loader,
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/batGhoul.glb?v=1680861204109",
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/batGhoul.glb?v=1682154704773",
   -13,
   0,
   -20,
@@ -323,7 +332,7 @@ let ghostlyTrigger = true;
 
 const geometry = new THREE.TorusKnotGeometry(0.75, 0.3, 50, 10);
 const texture = new THREE.TextureLoader().load(
-  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/Screenshot%202023-04-16%20110222.png?v=1681639563073"
+  "https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/Screenshot%202023-04-16%20110222.jpg?v=1681647382450"
 );
 const material = new THREE.MeshStandardMaterial({ map: texture });
 const torus = new THREE.Mesh(geometry, material);
@@ -396,7 +405,7 @@ let starter_array = [
   "As my host sleeps I wander here",
   "But now, the woods are fading",
   "ghouls and demons have arrived",
-  "They’re dead I think, never speaking or moving",
+  "They’re dead I think, <br>never speaking or moving",
   "like vampires they come and siphon <br>the colour from this place",
   "and all vibrancy is lost",
   "Now, the woods are Fading",
@@ -419,8 +428,8 @@ let positive_array = [
   "that's right, steal back the light",
   "who keeps killing them, I don't know",
   "some of the spirits who come, I recognise from before",
-  "but they come in different forms now, shinier and brighter",
-  "like they've taken in all the colour from outside"
+  "but they come in different forms now, <br>shinier and brighter",
+  "it's like they've taken in all<br> the colour from outside"
 ]
 let negative_array = [
   "I feel the colour fading away, act quick",
@@ -429,13 +438,13 @@ let negative_array = [
   "you could get stuck forever"
 ]
 let story_array = [
-    "that's right, steal back the light",
-  "who keeps killing them, I don't know",
-  "some of the spirits who come, I recognise from before",
-  "but they come in different forms now, shinier and brighter",
-  "like they've taken in all the colour from outside",
-    "I feel the colour fading away, act quick",
-  "lost, the lot of them, poor things",
+    "that's right, <br>steal back the light",
+  "someone must be killing them, <br>poor things",
+  "some of the spirits who come, <br>I recognise from before",
+  "but they come in different forms now, <br>shinier and brighter",
+  "like they've taken in all<br> the colour from outside",
+    "I feel the colour fading away, <br>act quick",
+  "lost, the lot of them, <br>poor things",
   "be careful they don't incase you",
   "you could get stuck forever"
 ]
@@ -455,7 +464,7 @@ instructions.addEventListener("click", function () {
     if (startCounter == 0) {
       setTimeout(function () {
         container.style.backgroundColor = "transparent";
-      }, 2000);
+      }, 1000);
       controls.getObject().position.y = controls.getObject().position.y + 20;
       controls.getObject().position.z = controls.getObject().position.z - 20;
       camera.rotation.y += Math.PI / 5;
@@ -485,7 +494,7 @@ if (desktop) {
     setTimeout(allowMovement, 15000);
     if (pausedV == true) {
       console.log("in controls.addEventListener");
-      setAfterImage("positive", true);
+      // setAfterImage("positive", true);
     }
     pausedV = false;
     instructions.innerHTML = "<p id='viewfinderText1'></p>";
@@ -620,13 +629,13 @@ const afterImagePass = new AfterimagePass(
   renderer.domElement.clientWidth,
   renderer.domElement.clientHeight,
   scene,
-  camera
+  camera, 0.5
 );
 composer.addPass(pencilLinePass);
 afterImagePass.uniforms.damp.value = 0.925;
 composer.addPass(afterImagePass);
 console.log("created postfx");
-pencilLinePass.material.uniforms.uThresh.value = 0.75;
+pencilLinePass.material.uniforms.uThresh.value = 0.4;
 
 addEventListener("mousemove", (event) => {});
 
@@ -634,12 +643,10 @@ addEventListener("mousemove", (event) => {});
 // handle timing
 let clock = new THREE.Clock();
 let delta = 0;
-// 30 fps
-let interval = 1 / 4;
-let interval2 = 1 / 7;
 
-let currentSign = 1;
-let elapsedTime = 0;
+// let interval = 1 / 4;
+let interval = 1 / 8;
+let interval2 = 1 / 7;
 let ended = false;
 console.log("pre animate");
 animate();
@@ -654,6 +661,7 @@ function animate() {
   
   if(afterImagePass.uniforms.damp.value >0.99){
     ended = true;
+    var viewfinderText1 = document.getElementById("viewfinderText1");
     viewfinderText1.innerHTML ="Game Over";
   }
 
@@ -669,7 +677,7 @@ function animate() {
       controls.update();
     }
 
-    elapsedTime += 0.1;
+    // pencilLinePass.uniforms.uThresh.value = map(elapsedTime%10, 0, 10, 0, 1);
     if (desktop) {
       // console.log(controls.getObject().position)
       raycaster.ray.origin.copy(controls.getObject().position);
@@ -696,7 +704,6 @@ function animate() {
       // raycaster2.setFromCamera(new THREE.Vector2(), camera);
       // THREE.Raycaster(this.fpsBody.position, direction)
     }
-
     const intersections = raycaster.intersectObjects(collideableObjects, false);
     // console.log(specialObjects)
     const intersections2 = raycaster2.intersectObjects(specialObjects, false);
@@ -704,95 +711,32 @@ function animate() {
     if (intersections2.length > 0) {
       if (debugOn) console.log("specialObjects: ", specialObjects);
       var current_val = afterImagePass.uniforms.damp.value;
-
       // console.log(intersections2[i]);
       for (let i = 0; i < intersections2.length; i++) {
         intersections2[i].object.material.color.set(0xffffff);
-        if (intersections2[i].object.name == "super") {
-          if(superTrigger){
-            handleRaycaster("superModel", "super");
-            superTrigger = false;
-          }
-        }
-        if (intersections2[i].object.name == "pirate") {
-          if(pirateTrigger){
-            handleRaycaster("pirate", "pirate");
-            pirateTrigger = false;
-          }
-        }
-        if (intersections2[i].object.name == "ghoul") {
-          if(ghoulTrigger){
-            handleRaycaster("ghoul", "ghoul");
-            ghoulTrigger = false;
-          }
-        }
-        if (intersections2[i].object.name == "haunted") {
-          if(hauntedTrigger){
-            handleRaycaster("haunted", "haunted");
-            hauntedTrigger = false;
-          }
-        }
-        if (intersections2[i].object.name == "haunted2") {
-          if(hauntedTrigger2){
-            handleRaycaster("haunted2", "haunted2");
-            hauntedTrigger2=false;
-          }
-        }
-        if (intersections2[i].object.name == "evil") {
-          if(evilTrigger){
-            handleRaycaster("evil", "evil");
-            evilTrigger = false;
-          }
-        }
-        if (intersections2[i].object.name == "miniGhoul") {
-          if(miniGhoulTrigger){
-            handleRaycaster("miniGhoul", "miniGhoul");
-            miniGhoulTrigger = false;
-          }
-        }
-        if (intersections2[i].object.name == "bat") {
-          if(batTrigger){
-            handleRaycaster("bat", "bat");
-            batTrigger = false
-          }
-        }
-        if (intersections2[i].object.name == "ghostly") {
-           if(ghostlyTrigger){
-             handleRaycaster("ghostly", "ghostly");
-             ghostlyTrigger = false;}
-        }
+        superTrigger = handleIntersections(intersections2[i], "super",  superTrigger);
+        pirateTrigger = handleIntersections(intersections2[i], "pirate",  pirateTrigger);
+        ghoulTrigger = handleIntersections(intersections2[i], "ghoul",  ghoulTrigger);
+        hauntedTrigger = handleIntersections(intersections2[i], "haunted",  hauntedTrigger);
+        hauntedTrigger2 = handleIntersections(intersections2[i], "haunted2",  hauntedTrigger2);
+        evilTrigger = handleIntersections(intersections2[i], "evil",  evilTrigger);
+        miniGhoulTrigger = handleIntersections(intersections2[i], "miniGhoul",  miniGhoulTrigger);
+        batTrigger = handleIntersections(intersections2[i], "bat", batTrigger);
+        ghostlyTrigger = handleIntersections(intersections2[i], "ghostly", ghostlyTrigger);
       }
     }
     const onObject = intersections.length > 0;
 
     var spinAmount = 0.5;
-    if (superTrigger) {
-      superModel.rotation.y += spinAmount;
-    }
-    if (evilTrigger) {
-      evil.rotation.y += spinAmount;
-    }
-    if (batTrigger) {
-      bat.rotation.y += spinAmount;
-    }
-    if (ghoulTrigger) {
-      ghoul.rotation.y += spinAmount;
-    }
-    if (miniGhoulTrigger) {
-      miniGhoul.rotation.y += spinAmount;
-    }
-    if (hauntedTrigger) {
-      haunted.rotation.y += spinAmount;
-    }
-    if (hauntedTrigger2) {
-      haunted2.rotation.y += spinAmount;
-    }
-    if (pirateTrigger) {
-      pirate.rotation.y += spinAmount;
-    }
-    if (ghostlyTrigger) {
-      ghostly.rotation.y += spinAmount;
-    }
+    if (superTrigger) superModel.rotation.y += spinAmount;
+    if (evilTrigger) evil.rotation.y += spinAmount;
+    if (batTrigger) bat.rotation.y += spinAmount;
+    if (ghoulTrigger) ghoul.rotation.y += spinAmount;
+    if (miniGhoulTrigger) miniGhoul.rotation.y += spinAmount;
+    if (hauntedTrigger) haunted.rotation.y += spinAmount;
+    if (hauntedTrigger2)haunted2.rotation.y += spinAmount;
+    if (pirateTrigger)pirate.rotation.y += spinAmount;
+    if (ghostlyTrigger) ghostly.rotation.y += spinAmount;
 
     const delta2 = (time - prevTime) / 1000;
 
@@ -829,6 +773,7 @@ function animate() {
     }
   }
   prevTime = time;
+  if(debugOn)console.log(afterImagePass.uniforms.damp.value)
 }
 
 //   =========================================
@@ -884,8 +829,8 @@ function timeout() {
         // text_iterator = 0;
         viewfinderText1.innerHTML = "";
       }
-      afterImagePass.uniforms.damp.value =
-        afterImagePass.uniforms.damp.value - 0.1;
+      // afterImagePass.uniforms.damp.value =
+      //   afterImagePass.uniforms.damp.value - 0.1;
       text_iterator++;
     } catch (error) {
       //pass
@@ -931,67 +876,60 @@ function timeoutMobile() {
       // }
     }
   }, 5000);
-}
-
-var dampingTimer = function (callback, delay) {
-  var timerId,
-    start,
-    remaining = delay;
-
-  this.pause = function () {
-    window.clearTimeout(timerId);
-    timerId = null;
-    remaining -= Date.now() - start;
-  };
-
-  this.resume = function () {
-    if (timerId) {
-      return;
-    }
-
-    start = Date.now();
-    timerId = window.setTimeout(callback, remaining);
-  };
-
-  this.resume();
-};
+} 
 
 function allowMovement() {
   movementAllowed = true;
-  setAfterImage(null, "positive", true);
+  // setAfterImage(null, "positive", true);
 }
-function resetAfterImage(val, amount) {
+function resetAfterImage(val) {
   afterImagePass.uniforms.damp.value = val;
-  setAfterImage(val, "negative");
+  // setAfterImage(val, "negative");
   pencilLinePass.material.uniforms.uThresh.value = 0.75;
 }
 function setAfterImage(val, amount, loop) {
   if (pausedV == false) {
     setTimeout(function () {
       console.log("pre change pass: ", afterImagePass.uniforms.damp.value);
-      if (amount == "positive") {
-        if (afterImagePass.uniforms.damp.value < 0.99) {
-          afterImagePass.uniforms.damp.value =
-            afterImagePass.uniforms.damp.value +
-            0.05;
-        }
-      } else {
-        afterImagePass.uniforms.damp.value =
-          val -
-          val/8;
-      }
-
+      afterImagePass.uniforms.damp.value = val;
       console.log("post change pass: ", afterImagePass.uniforms.damp.value);
       pencilLinePass.material.uniforms.uThresh.value = 0.75;
-      counter.innerHTML =
-        parseInt((1 - afterImagePass.uniforms.damp.value) * 100) + "%";
-      if (afterImagePass.uniforms.damp.value > 0.99) {
-        ended = true;
-      }
+      // counter.innerHTML =
+      //   parseInt((1 - afterImagePass.uniforms.damp.value) * 100) + "%";
+      // if (afterImagePass.uniforms.damp.value > 0.99) {
+      //   ended = true;
+      // }
       if (loop) setAfterImage(val, amount, true);
     }, 5000);
   }
 }
+// function setAfterImage(val, amount, loop) {
+//   if (pausedV == false) {
+//     setTimeout(function () {
+//       console.log("pre change pass: ", afterImagePass.uniforms.damp.value);
+//       if (amount == "positive") {
+//         if (afterImagePass.uniforms.damp.value < 0.99) {
+//           afterImagePass.uniforms.damp.value =
+//             afterImagePass.uniforms.damp.value +
+//             0.05;
+//         }
+//       } else {
+//         afterImagePass.uniforms.damp.value =
+//           val -
+//           val/8;
+//       }
+
+//       console.log("post change pass: ", afterImagePass.uniforms.damp.value);
+//       pencilLinePass.material.uniforms.uThresh.value = 0.75;
+//       // counter.innerHTML =
+//       //   parseInt((1 - afterImagePass.uniforms.damp.value) * 100) + "%";
+//       if (afterImagePass.uniforms.damp.value > 0.99) {
+//         ended = true;
+//       }
+//       if (loop) setAfterImage(val, amount, true);
+//     }, 5000);
+//   }
+// }
 
 function is_touch_enabled() {
   return (
@@ -1086,10 +1024,13 @@ function onWindowResize() {
   }
 }
 
-function restartGame() {}
+function restartGame() {
 
-function handleRaycaster(HTMLName, name) {
-  var currentHTML = document.getElementById(HTMLName);
+}
+
+function handleRaycaster(name) {
+  inRaycaster = true;
+  var currentHTML = document.getElementById(name);
   currentHTML.style.visibility = "visible";
   for (let j = 0; j < specialObjects.length; j++) {
     if (specialObjects[j].name == name) {
@@ -1098,12 +1039,29 @@ function handleRaycaster(HTMLName, name) {
     }
   }
   var current_val = afterImagePass.uniforms.damp.value; 
-  afterImagePass.uniforms.damp.value = 0.875;
-  pencilLinePass.material.uniforms.uThresh.value = 0.2;
+  afterImagePass.uniforms.damp.value = 0.925;
+  // pencilLinePass.material.uniforms.uThresh.value = 0.75;
   // setTimeout(resetAfterImage(current_val, -0.1), 5000);
   var viewfinderText1 = document.getElementById("viewfinderText1");
-  if(current_val<0.7) viewfinderText1.innerHTML = positive_array[Math.floor(Math.random()*positive_array.length)]
-  if(current_val>0.7)viewfinderText1.innerHTML = negative_array[Math.floor(Math.random()*negative_array.length)]
-  setTimeout(function(){viewfinderText1.innerHTML = ""}, 5000);
-  setTimeout(setAfterImage(current_val, "negative"), 5000);
+  // if(current_val<0.7) viewfinderText1.innerHTML = positive_array[Math.floor(Math.random()*positive_array.length)]
+  // if(current_val>0.7)viewfinderText1.innerHTML = negative_array[Math.floor(Math.random()*negative_array.length)]
+  viewfinderText1.innerHTML = "";
+  setTimeout(function(){var indexVal =Math.floor(Math.random()*story_array.length-1);if(story_array.length>1) viewfinderText1.innerHTML = story_array[indexVal]; story_array.splice(indexVal, 1); inRaycaster=false;}, 5000);
+  setTimeout(function(){viewfinderText1.innerHTML = ""}, 9000);
+  // setTimeout(setAfterImage(current_val, "negative"), 7000);
+  setTimeout(function(){resetAfterImage(mainAfterImageVal)}, 7000 )
+}
+function handleIntersections(currentIntersections, currentName, currentTrigger){
+  console.log(currentName)
+  if (currentIntersections.object.name == currentName) {
+    if(currentTrigger){
+      handleRaycaster(currentName);
+      currentTrigger = false;
+    }
+  }
+  return currentTrigger;
+}
+
+function scale (number, inMin, inMax, outMin, outMax) {
+    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }

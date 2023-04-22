@@ -1,6 +1,7 @@
 // heavily inspired by this tutorial by Maya Nedeljković Batić  https://tympanus.net/codrops/2022/11/29/sketchy-pencil-effect-with-three-js-post-processing/
 // import * as THREE from 'three'
-import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r132/build/three.module.js';
+// import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r132/build/three.module.js';
+import {THREE} from './glob.js';
 
 export class PencilLinesMaterial extends THREE.ShaderMaterial {
 	constructor() {
@@ -18,7 +19,7 @@ export class PencilLinesMaterial extends THREE.ShaderMaterial {
     uniform sampler2D tDiffuse;
     uniform sampler2D uNormals;
     uniform sampler2D uTexture;
-    float uThresh = 0.75;
+    uniform float uThresh;
     
     uniform vec2 uResolution;
     
@@ -68,6 +69,7 @@ export class PencilLinesMaterial extends THREE.ShaderMaterial {
     float diffuseValue(int x, int y) {
         float cutoff = 40.0;
         float offset =  0.5 / cutoff;
+        // float offset = uThresh / cutoff
         float noiseValue = clamp(texture(uTexture, vUv).r, 0.0, cutoff) / cutoff - offset;
     
         return valueAtPoint(tDiffuse, vUv + noiseValue, vec2(1.0 / uResolution.x, 1.0 / uResolution.y), vec2(x, y)) * 0.6;
@@ -161,7 +163,8 @@ export class PencilLinesMaterial extends THREE.ShaderMaterial {
             // gl_FragColor = lineColor;
             vec4 altColor = vec4(0.07, 0.23, 0.87, 1.0);
             // vec4 mixedColor = mix(lineColor, orig4, 0.75);
-            vec4 mixedColor = mix(lineColor, orig4, uThresh);
+            // vec4 mixedColor = mix(lineColor, orig4, uThresh);
+            vec4 mixedColor = mix(lineColor, orig4, 0.75);
             gl_FragColor = mixedColor;
         }
 

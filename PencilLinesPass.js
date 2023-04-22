@@ -1,6 +1,6 @@
 import { Pass, FullScreenQuad } from 'https://threejsfundamentals.org/threejs/resources/threejs/r132/examples/jsm/postprocessing/Pass.js';
 import { PencilLinesMaterial } from './PencilLinesMaterial.js'
-import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r132/build/three.module.js';
+import {THREE} from './glob.js';
 
 export class PencilLinesPass extends Pass {
 	// fsQuad: FullScreenQuad
@@ -16,7 +16,7 @@ export class PencilLinesPass extends Pass {
 		height,
 		scene,
 		camera, 
-		uThresh ) {
+		uThresh = 0.75) {
 		super()
 		
 		this.scene = scene
@@ -38,7 +38,7 @@ export class PencilLinesPass extends Pass {
 
 		this.normalMaterial = new THREE.MeshNormalMaterial()
 
-		this.material.uniforms.uResolution.value = new THREE.Vector2(width, height)
+		this.material.uniforms.uResolution.value = new THREE.Vector2(width, height);
 		this.material.uniforms.uThresh.value = uThresh;
 		const loader = new THREE.TextureLoader()
 		loader.load('https://cdn.glitch.global/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/cloud-noise.png?v=1680861827995', (texture) => {

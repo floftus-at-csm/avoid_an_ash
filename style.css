@@ -203,7 +203,7 @@
       cursor: pointer;
       z-index: 11;
         opacity: 1;
-        animation: fade 5s linear infinite;
+        /* animation: fade 5s linear infinite; */
       }
     
     
@@ -218,7 +218,7 @@
     display:block;
     z-index: 50;
   }
-    #superModel{
+    #super{
       top: 0%;
       left: 8%;
       visibility: hidden;
