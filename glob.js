@@ -943,7 +943,7 @@ function addTouchControls() {
     rotationSpeed: 0.02, // coefficient of rotation
     maxPitch: 25, // max camera pitch angle
     hitTest: false, // stop on hitting objects
-    hitTestDistance: 40, // distance to test for hit
+    hitTestDistance: 5, // distance to test for hit
     raycasterObjects: specialObjects,
   };
   controls = new TouchControls(container[0].parentNode, camera, options);
