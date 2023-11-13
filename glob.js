@@ -97,7 +97,7 @@ loader.load(
   // "https://cdn.glitch.me/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/FullLandscape2.glb?v=1680860285362",
   // "https://cdn.glitch.me/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/FullLandscape3.glb?v=1681247059540",
   // "https://cdn.glitch.me/3b6ae790-11fe-459a-8ac8-c2a0b10ed2b9/FullLandscapeReduced.glb?v=1682153617463",
-  "content/ImageToStl.com_fulllandscape1.glb",
+  "content/FullLandscape3.glb",
   function (gltf) {
     scene.add(gltf.scene);
     dino = gltf.scene;
