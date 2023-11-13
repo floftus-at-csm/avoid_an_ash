@@ -794,7 +794,7 @@ function addModel(
       }
     );
   });
-}
+};
 
 function timeout() {
   setTimeout(function () {
